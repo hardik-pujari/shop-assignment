@@ -1,0 +1,43 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.product-card {
+  border: 1px solid gray;
+  padding: 10px;
+  width: 150px;
+  flex: 1 0 150px;
+  text-align: center;
+}
+.cart-view {
+  margin-top: 20px;
+}
+.cart-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.checkout-form {
+  margin-top: 20px;
+}
+.receipt-modal {
+  position: fixed;
+  top: 30%;
+  left: 30%;
+  background: #fff;
+  border: 1px solid #444;
+  padding: 40px;
+}
+@media (max-width: 620px) {
+  .products-grid {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

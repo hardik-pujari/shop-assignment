@@ -1,0 +1,108 @@
+import React, { useState, useEffect } from 'react';
+import ProductsGrid from './components/ProductsGrid';
+import CartView from './components/CartView';
+import CheckoutForm from './components/CheckoutForm';
+import ReceiptModal from './components/ReceiptModal';
+import api from './api/api';
+
+export default function App() {
+  const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState({ items: [], total: 0 });
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [receipt, setReceipt] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const prods = await api.getProducts();
+        if (mounted) setProducts(Array.isArray(prods) ? prods : prods ?? []);
+      } catch (err) {
+        console.error('Failed to load products:', err);
+      }
+
+      try {
+        const c = await api.getCart();
+        if (mounted) setCart(c ?? { items: [], total: 0 });
+      } catch (err) {
+        console.error('Failed to load cart:', err);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const refreshCart = async () => {
+    try {
+      const c = await api.getCart();
+      setCart(c ?? { items: [], total: 0 });
+    } catch (err) {
+      console.error('Failed to refresh cart:', err);
+    }
+  };
+
+  const addToCart = async (productId) => {
+    try {
+      await api.addToCart(productId, 1);
+      await refreshCart();
+    } catch (err) {
+      console.error('Add to cart failed:', err);
+    }
+  };
+
+  const removeFromCart = async (productId) => {
+    try {
+      await api.removeFromCart(productId);
+      await refreshCart();
+    } catch (err) {
+      console.error('Remove from cart failed:', err);
+    }
+  };
+
+  const updateCart = async (productId, qty) => {
+    try {
+      if (qty <= 0) {
+        await api.removeFromCart(productId);
+      } else if (api.updateCart) {
+        await api.updateCart(productId, qty);
+      } else {
+        await api.addToCart(productId, qty);
+      }
+      await refreshCart();
+    } catch (err) {
+      console.error('Update cart failed:', err);
+    }
+  };
+
+  const handleCheckout = async (cartItems, user) => {
+    try {
+      const data = await api.checkout(cartItems, user);
+      const r = data?.receipt ?? data ?? null;
+      setReceipt(r);
+      setShowReceipt(true);
+      await refreshCart();
+    } catch (err) {
+      console.error('Checkout failed:', err);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Mock E-Com Cart</h1>
+      <ProductsGrid products={products} onAddToCart={addToCart} />
+      <CartView cart={cart} onRemove={removeFromCart} onUpdate={updateCart} />
+      <CheckoutForm cartItems={cart.items} onCheckout={handleCheckout} />
+      {showReceipt && (
+        <ReceiptModal
+          receipt={receipt}
+          onClose={() => {
+            setShowReceipt(false);
+            setReceipt(null);
+          }}
+        />
+      )}
+    </div>
+  );
+}
