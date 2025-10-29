@@ -78,7 +78,6 @@ export default function App() {
 
   const handleCheckout = async (cartItems, user) => {
     try {
-      // Normalize cart items to the shape expected by backend: { productId, qty }
       const normalized = Array.isArray(cartItems)
         ? cartItems.map((it) => ({
             productId:

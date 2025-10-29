@@ -4,7 +4,6 @@ async function getProducts(req, res, next) {
 	try {
 		let products = await Product.find().lean();
 		if (!products || products.length === 0) {
-			// seed small dataset
 			const seed = [
 				{ name: 'Apple', price: 10, stock: 20 },
 				{ name: 'Banana', price: 5, stock: 30 },

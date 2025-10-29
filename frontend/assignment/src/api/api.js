@@ -3,7 +3,6 @@ import axios from "axios";
 const BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
 
 console.log("API base:", BASE);
-// --- Mock fallback for offline/dev mode ---
 const mockProducts = [
   { _id: "m1", name: "Mock Apple", price: 10 },
   { _id: "m2", name: "Mock Banana", price: 5 },
@@ -23,7 +22,6 @@ async function tryRequest(fn, fallback) {
   try {
     return await fn();
   } catch (err) {
-    // network/backend error -> use fallback
     console.warn('API request failed, falling back to mock', err.message);
     return fallback();
   }
@@ -110,7 +108,6 @@ const checkout = async (cartItems = [], user = {}) =>
     async () =>
       (await axios.post(`${BASE}/checkout`, { cartItems, user })).data,
     () => {
-      // create fake receipt and clear in-memory cart
       const items =
         cartItems.length > 0
           ? cartItems

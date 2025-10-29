@@ -6,12 +6,9 @@ async function checkout(req, res, next) {
 		const { cartItems = [], user = {} } = req.body;
 		let items = Array.isArray(cartItems) ? cartItems.slice() : [];
 
-		// If no cart items provided, build a mock list for easier testing/dev.
 		if (items.length === 0) {
-			// Try to use up to two real products from DB
 			let products = await Product.find().limit(2);
 			if (!products || products.length === 0) {
-				// seed minimal products if DB is empty
 				const seed = [
 					{ name: 'Mock Apple', price: 10, stock: 20 },
 					{ name: 'Mock Banana', price: 5, stock: 30 },

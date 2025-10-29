@@ -8,7 +8,6 @@ export default function CartView({ cart, onRemove, onUpdate }) {
         <div className="text-gray-500">Your cart is empty.</div>
       )}
       {cart.items.map((item, idx) => {
-        // Items can come from server (item.product is populated) or from in-memory mock (item.productId)
         const productId =
           item.productId ??
           (item.product && (item.product._id || item.product)) ??

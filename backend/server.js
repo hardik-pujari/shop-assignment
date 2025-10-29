@@ -34,8 +34,6 @@ app.get("/api/health", (req, res) => res.json({ ok: true, time: Date.now() }));
 app.use(errorHandler);
 
 let server;
-
-// ✅ Start the server
 async function start() {
   try {
     await connectDB();
@@ -50,7 +48,6 @@ async function start() {
 
 start();
 
-// ✅ Graceful shutdown
 async function gracefulShutdown(signal) {
   try {
     console.log(`Received ${signal}. Shutting down gracefully...`);

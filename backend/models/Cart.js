@@ -11,7 +11,6 @@ const cartSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// recalculate total and populate
 cartSchema.methods.recalculate = async function () {
   await this.populate('items.product');
   let total = 0;
