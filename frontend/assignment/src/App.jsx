@@ -98,20 +98,28 @@ export default function App() {
   };
 
   return (
-    <div>
-      <h1>Mock E-Com Cart</h1>
-      <ProductsGrid products={products} onAddToCart={addToCart} />
-      <CartView cart={cart} onRemove={removeFromCart} onUpdate={updateCart} />
-      <CheckoutForm cartItems={cart.items} onCheckout={handleCheckout} />
-      {showReceipt && (
-        <ReceiptModal
-          receipt={receipt}
-          onClose={() => {
-            setShowReceipt(false);
-            setReceipt(null);
-          }}
-        />
-      )}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
+      <div className="w-full max-w-4xl mx-auto px-4 md:px-8">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8 mt-2">Mock E-Com Cart</h1>
+        <div className="mb-8">
+          <ProductsGrid products={products} onAddToCart={addToCart} />
+        </div>
+        <div className="mb-8">
+          <CartView cart={cart} onRemove={removeFromCart} onUpdate={updateCart} />
+        </div>
+        <div className="mb-8">
+          <CheckoutForm cartItems={cart.items} onCheckout={handleCheckout} />
+        </div>
+        {showReceipt && (
+          <ReceiptModal
+            receipt={receipt}
+            onClose={() => {
+              setShowReceipt(false);
+              setReceipt(null);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }
