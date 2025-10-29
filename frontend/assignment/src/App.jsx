@@ -78,7 +78,16 @@ export default function App() {
 
   const handleCheckout = async (cartItems, user) => {
     try {
-      const data = await api.checkout(cartItems, user);
+      // Normalize cart items to the shape expected by backend: { productId, qty }
+      const normalized = Array.isArray(cartItems)
+        ? cartItems.map((it) => ({
+            productId:
+              it.productId ?? (it.product && (it.product._id || it.product)) ?? null,
+            qty: Number(it.qty ?? it.quantity ?? 1),
+          }))
+        : [];
+
+      const data = await api.checkout(normalized, user);
       const r = data?.receipt ?? data ?? null;
       setReceipt(r);
       setShowReceipt(true);

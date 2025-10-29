@@ -1,1 +1,2 @@
-@import "tailwindcss";
+/* Base styles - import the original app stylesheet */
+@import './App.css';
